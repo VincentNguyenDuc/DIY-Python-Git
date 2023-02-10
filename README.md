@@ -7,6 +7,7 @@
   - [General information](#general-information)
   - [Technologies](#technologies)
   - [Project Objectives](#project-objectives)
+  - [Commands](#commands)
 
 ## General information
 
@@ -17,7 +18,22 @@
 ## Technologies
 
 - Python
+- pip
+- git
 
 ## Project Objectives
 
-- Build Git from scratch
+- Built Git from scratch
+- Worked with python packaging system
+- Set up a virtual environment for development
+- Used SHA-1 for implement "the object database"
+
+## Commands
+
+```bash
+# initialize a ugit repository
+ugit init
+
+# hash object for storage
+hash-object
+```
