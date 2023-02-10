@@ -42,6 +42,6 @@ ugit init
 # hash object for storage
 ugit hash-object {file_name}
 
-# get contents from object id
+# print contents from object id
 ugit cat-file {object_id}
 ```

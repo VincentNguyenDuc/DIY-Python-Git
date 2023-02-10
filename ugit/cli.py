@@ -51,6 +51,6 @@ def hash_object(args):
 
 def cat_file(args):
     sys.stdout.flush()
-    sys.stdout.buffer.write(commands.get_object(args.object))
+    sys.stdout.buffer.write(commands.get_object(args.object, expected=None)) # currently set to None => read any file types
 
 
