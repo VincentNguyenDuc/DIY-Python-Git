@@ -7,6 +7,7 @@
   - [General information](#general-information)
   - [Technologies](#technologies)
   - [Project Objectives](#project-objectives)
+  - [Set up](#set-up)
   - [Commands](#commands)
 
 ## General information
@@ -28,6 +29,10 @@
 - Set up a virtual environment for development
 - Used SHA-1 for implement "the object database"
 
+## Set up
+
+
+
 ## Commands
 
 ```bash
@@ -35,5 +40,8 @@
 ugit init
 
 # hash object for storage
-hash-object
+ugit hash-object {file_name}
+
+# get contents from object id
+ugit cat-file {object_id}
 ```
