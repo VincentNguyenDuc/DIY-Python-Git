@@ -1,18 +1,23 @@
-# Data Science Project
+# DIY Git using Python
 
 ## Table of contents
 
-- [Data Science Project](#data-science-project)
+- [DIY Git using Python](#diy-git-using-python)
   - [Table of contents](#table-of-contents)
   - [General information](#general-information)
   - [Technologies](#technologies)
-  - [Algorithms](#algorithms)
   - [Project Objectives](#project-objectives)
 
 ## General information
 
+- In this project, I will try to implement a Git-like version control system called "μgit" from scratch but using Python
+
+- ugit is not exactly Git, but it shares the important ideas of Git. ugit is way shorter and doesn't implement irrelevant features.
+
 ## Technologies
 
-## Algorithms
+- Python
 
 ## Project Objectives
+
+- Build Git from scratch
