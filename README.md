@@ -31,8 +31,6 @@
 
 ## Set up
 
-
-
 ## Commands
 
 ```bash
@@ -44,4 +42,7 @@ ugit hash-object {file_name}
 
 # print contents from object id
 ugit cat-file {object_id}
+
+# storing the whole directory
+ugit write-tree
 ```
