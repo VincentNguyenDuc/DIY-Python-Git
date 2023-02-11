@@ -59,13 +59,11 @@ def _empty_current_directory():
             if is_ignored(path):
                 continue
             try:
-                print(path)
                 os.rmdir(path)
             except (OSError):
                 # Deletion might fail if the directory contains ignored files,
                 # so it's OK
                 pass
-
 
 def read_tree(tree_oid):
     _empty_current_directory()
@@ -73,6 +71,12 @@ def read_tree(tree_oid):
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, 'wb') as f:
             f.write(commands.get_object(oid))
+
+def commit(message):
+    commit = f'tree {write_tree()}\n'
+    commit += '\n'
+    commit += f'{message}\n'
+    return commands.hash_object(commit.encode(), 'commit')
 
 
 def is_ignored(path):
