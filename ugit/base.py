@@ -1,4 +1,8 @@
+import itertools
+import operator
 import os
+
+from collections import namedtuple
 
 from . import commands
 
@@ -47,7 +51,6 @@ def get_tree(oid, base_path=''):
     return result
 
 def _empty_current_directory():
-    # ! why the hell this deletes every files under .ugit folder
     for root, dirnames, filenames in os.walk('.', topdown=False):
         for filename in filenames:
             path = os.path.relpath(f'{root}/{filename}')
@@ -74,9 +77,40 @@ def read_tree(tree_oid):
 
 def commit(message):
     commit = f'tree {write_tree()}\n'
+
+    HEAD = commands.get_HEAD()
+    if HEAD:
+        commit += f'parent {HEAD}\n'
+
     commit += '\n'
     commit += f'{message}\n'
-    return commands.hash_object(commit.encode(), 'commit')
+
+    oid = commands.hash_object(commit.encode(), 'commit')
+
+    commands.set_HEAD(oid)
+
+    return oid
+
+
+Commit = namedtuple('Commit', ['tree', 'parent', 'message'])
+
+
+def get_commit(oid):
+    parent = None
+
+    commit = commands.get_object(oid, 'commit').decode()
+    lines = iter(commit.splitlines())
+    for line in itertools.takewhile(operator.truth, lines):
+        key, value = line.split(' ', 1)
+        if key == 'tree':
+            tree = value
+        elif key == 'parent':
+            parent = value
+        else:
+            assert False, f'Unknown field {key}'
+
+    message = '\n'.join(lines)
+    return Commit(tree=tree, parent=parent, message=message)
 
 
 def is_ignored(path):
