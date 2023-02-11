@@ -32,6 +32,15 @@
 
 ## Set Up
 
+- Install pip following [instruction](https://pip.pypa.io/en/stable/installation/)
+- Clone [this repository](https://github.com/VincentNguyenDuc/DIY-Python-Git.git)
+- Within the DIY-Python-Git directory, select the Python interpreter (where pip installed)
+- Run:
+
+```bash
+pip install .
+```
+
 ## Commands
 
 ```bash
@@ -46,6 +55,9 @@ ugit cat-file {object_id}
 
 # storing the whole directory
 ugit write-tree
+
+# restore a previous version
+ugit read-tree {object_id}
 ```
 
 ## Underlying Implementation
