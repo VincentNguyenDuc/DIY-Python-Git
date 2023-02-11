@@ -24,7 +24,6 @@ def write_tree(directory='.'):
                    in sorted(entries))
     return commands.hash_object(tree.encode(), 'tree')
 
-
 def _iter_tree_entries(oid):
     if not oid:
         return
@@ -32,7 +31,6 @@ def _iter_tree_entries(oid):
     for entry in tree.decode().splitlines():
         type_, oid, name = entry.split(' ', 2)
         yield type_, oid, name
-
 
 def get_tree(oid, base_path=''):
     result = {}
@@ -48,8 +46,8 @@ def get_tree(oid, base_path=''):
             assert False, f'Unknown tree entry {type_}'
     return result
 
-
 def _empty_current_directory():
+    # ! why the hell this deletes every files under .ugit folder
     for root, dirnames, filenames in os.walk('.', topdown=False):
         for filename in filenames:
             path = os.path.relpath(f'{root}/{filename}')
@@ -61,8 +59,9 @@ def _empty_current_directory():
             if is_ignored(path):
                 continue
             try:
+                print(path)
                 os.rmdir(path)
-            except (FileNotFoundError, OSError):
+            except (OSError):
                 # Deletion might fail if the directory contains ignored files,
                 # so it's OK
                 pass
@@ -77,4 +76,4 @@ def read_tree(tree_oid):
 
 
 def is_ignored(path):
-    return '.ugit' in path.split('/')
+    return '.ugit' in path
