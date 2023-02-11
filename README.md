@@ -1,16 +1,17 @@
-# DIY Git using Python
+# An Implementation of Git using Python
 
-## Table of contents
+## Table of Contents
 
-- [DIY Git using Python](#diy-git-using-python)
-  - [Table of contents](#table-of-contents)
-  - [General information](#general-information)
+- [An Implementation of Git using Python](#an-implementation-of-git-using-python)
+  - [Table of Contents](#table-of-contents)
+  - [General Information](#general-information)
   - [Technologies](#technologies)
   - [Project Objectives](#project-objectives)
-  - [Set up](#set-up)
+  - [Set Up](#set-up)
   - [Commands](#commands)
+  - [Underlying Implementation](#underlying-implementation)
 
-## General information
+## General Information
 
 - In this project, I will try to implement a Git-like version control system called "μgit" from scratch but using Python
 
@@ -29,7 +30,7 @@
 - Set up a virtual environment for development
 - Used SHA-1 for implement "the object database"
 
-## Set up
+## Set Up
 
 ## Commands
 
@@ -46,3 +47,5 @@ ugit cat-file {object_id}
 # storing the whole directory
 ugit write-tree
 ```
+
+## Underlying Implementation
