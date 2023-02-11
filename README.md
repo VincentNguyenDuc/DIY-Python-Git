@@ -58,6 +58,12 @@ ugit write-tree
 
 # restore a previous version
 ugit read-tree {object_id}
+
+# commit
+ugit commit -m 'message'
+
+# list all commit
+ugit log {oid}(optional)
 ```
 
 ## Underlying Implementation
