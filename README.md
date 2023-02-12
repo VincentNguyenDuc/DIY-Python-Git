@@ -63,7 +63,7 @@ ugit read-tree {object_id}
 ugit commit -m 'message'
 
 # list all commit
-ugit log {oid}(optional)
+ugit log {object_id}(optional)
 ```
 
 ## Underlying Implementation
