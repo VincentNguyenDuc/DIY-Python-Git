@@ -1,6 +1,7 @@
 import itertools
 import operator
 import os
+import string
 
 from collections import namedtuple
 
@@ -129,7 +130,24 @@ def get_commit(oid):
     return Commit(tree=tree, parent=parent, message=message)
 
 def get_oid(name):
-    return commands.get_ref(name) or name
+    # Name is references
+    refs_to_try = [
+        f'{name}',
+        f'refs/{name}',
+        f'refs/tags/{name}',
+        f'refs/heads/{name}',
+    ]
+
+    for ref in refs_to_try:
+        if commands.get_ref(ref):
+            return commands.get_ref(ref)
+    
+    # Name is object id
+    is_hex = all(c in string.hexdigits for c in name)
+    if len(name) == 40 and is_hex:
+        return name
+    
+    assert False, f'Unknown name {name}'
 
 
 def is_ignored(path):

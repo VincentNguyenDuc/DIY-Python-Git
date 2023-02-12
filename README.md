@@ -47,26 +47,20 @@ pip install .
 # initialize a ugit repository
 ugit init
 
-# hash object for storage
-ugit hash-object {file_name}
-
 # print contents from object id
 ugit cat-file {object_id}
-
-# storing the whole directory
-ugit write-tree
-
-# restore a previous version
-ugit read-tree {object_id}
 
 # commit
 ugit commit -m 'message'
 
-# list all commit
-ugit log {object_id}(optional)
+# tag
+ugit tag {name} {object_id}(optional - use for specific commit / if not available then tag the closet commit)
+
+# List all commits from the chosen commit to the beginning of version history. If not specific object id or refs, then list all commits to the current HEAD
+ugit log {object_id / refs}(optional)
 
 # check out
-ugit checkout {object_id}
+ugit checkout {object_id / refs}
 ```
 
 ## Underlying Implementation
