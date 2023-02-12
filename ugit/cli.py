@@ -1,7 +1,8 @@
 import argparse
 import os
 import sys
-import subprocess
+
+
 import textwrap
 
 from . import base
@@ -125,5 +126,5 @@ def k(args):
             dot += f'"{oid}" -> "{commit.parent}"\n'
 
     dot += '}'
-    print(dot)
 
+    print(dot)

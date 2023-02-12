@@ -61,6 +61,9 @@ ugit log {object_id / refs}(optional)
 
 # check out
 ugit checkout {object_id / refs}
+
+# render graph 
+ugit k
 ```
 
 ## Underlying Implementation
