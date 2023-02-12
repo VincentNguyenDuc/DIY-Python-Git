@@ -1,10 +1,11 @@
 import argparse
 import os
 import sys
+import subprocess
 import textwrap
 
 from . import base
-from . import commands
+from . import data
 
 
 def main():
@@ -44,7 +45,7 @@ def parse_args():
 
     log_parser = commands.add_parser('log')
     log_parser.set_defaults(func=log)
-    log_parser.add_argument('oid', type=oid, nargs='?')
+    log_parser.add_argument('oid', default='@', type=oid, nargs='?')
 
     checkout_parser = commands.add_parser('checkout')
     checkout_parser.set_defaults(func=checkout)
@@ -53,24 +54,27 @@ def parse_args():
     tag_parser = commands.add_parser('tag')
     tag_parser.set_defaults(func=tag)
     tag_parser.add_argument('name')
-    tag_parser.add_argument('oid', type=oid, nargs='?')
+    tag_parser.add_argument('oid', default='@', type=oid, nargs='?')
+
+    k_parser = commands.add_parser('k')
+    k_parser.set_defaults(func=k)
 
     return parser.parse_args()
 
 
 def init(args):
-    commands.init()
-    print(f'Initialized empty ugit repository in {os.getcwd()}/{commands.GIT_DIR}')
+    data.init()
+    print(f'Initialized empty ugit repository in {os.getcwd()}/{data.GIT_DIR}')
 
 
 def hash_object(args):
     with open(args.file, 'rb') as f:
-        print(commands.hash_object(f.read()))
+        print(data.hash_object(f.read()))
 
 
 def cat_file(args):
     sys.stdout.flush()
-    sys.stdout.buffer.write(commands.get_object(args.object, expected=None))
+    sys.stdout.buffer.write(data.get_object(args.object, expected=None))
 
 
 def write_tree(args):
@@ -86,7 +90,7 @@ def commit(args):
 
 
 def log(args):
-    oid = args.oid or commands.get_ref('HEAD')
+    oid = args.oid
     while oid:
         commit = base.get_commit(oid)
 
@@ -102,5 +106,24 @@ def checkout(args):
 
 
 def tag(args):
-    oid = args.oid or commands.get_ref('HEAD')
-    base.create_tag(args.name, oid)
+    base.create_tag(args.name, args.oid)
+
+
+def k(args):
+    dot = 'digraph commits {\n'
+
+    oids = set()
+    for refname, ref in data.iter_refs():
+        dot += f'"{refname}" [shape=note]\n'
+        dot += f'"{refname}" -> "{ref}"\n'
+        oids.add(ref)
+
+    for oid in base.iter_commits_and_parents(oids):
+        commit = base.get_commit(oid)
+        dot += f'"{oid}" [shape=box style=filled label="{oid[:10]}"]\n'
+        if commit.parent:
+            dot += f'"{oid}" -> "{commit.parent}"\n'
+
+    dot += '}'
+    print(dot)
+
