@@ -6,6 +6,7 @@ from collections import namedtuple
 
 from . import commands
 
+
 def write_tree(directory='.'):
     entries = []
     with os.scandir(directory) as it:
@@ -28,6 +29,7 @@ def write_tree(directory='.'):
                    in sorted(entries))
     return commands.hash_object(tree.encode(), 'tree')
 
+
 def _iter_tree_entries(oid):
     if not oid:
         return
@@ -35,6 +37,7 @@ def _iter_tree_entries(oid):
     for entry in tree.decode().splitlines():
         type_, oid, name = entry.split(' ', 2)
         yield type_, oid, name
+
 
 def get_tree(oid, base_path=''):
     result = {}
@@ -49,6 +52,7 @@ def get_tree(oid, base_path=''):
         else:
             assert False, f'Unknown tree entry {type_}'
     return result
+
 
 def _empty_current_directory():
     for root, dirnames, filenames in os.walk('.', topdown=False):
@@ -68,6 +72,7 @@ def _empty_current_directory():
                 # so it's OK
                 pass
 
+
 def read_tree(tree_oid):
     _empty_current_directory()
     for path, oid in get_tree(tree_oid, base_path='./').items():
@@ -75,10 +80,11 @@ def read_tree(tree_oid):
         with open(path, 'wb') as f:
             f.write(commands.get_object(oid))
 
-def commit(message):
-    commit = f'tree {write_tree()}\n'
 
-    HEAD = commands.get_HEAD()
+def commit(message):
+    commit = f'tree {write_tree ()}\n'
+
+    HEAD = commands.get_ref('HEAD')
     if HEAD:
         commit += f'parent {HEAD}\n'
 
@@ -87,14 +93,19 @@ def commit(message):
 
     oid = commands.hash_object(commit.encode(), 'commit')
 
-    commands.set_HEAD(oid)
+    commands.update_ref('HEAD', oid)
 
     return oid
+
 
 def checkout(oid):
     commit = get_commit(oid)
     read_tree(commit.tree)
-    commands.set_HEAD(oid)
+    commands.update_ref('HEAD', oid)
+
+
+def create_tag(name, oid):
+    commands.update_ref(f'refs/tags/{name}', oid)
 
 
 Commit = namedtuple('Commit', ['tree', 'parent', 'message'])
@@ -116,6 +127,9 @@ def get_commit(oid):
 
     message = '\n'.join(lines)
     return Commit(tree=tree, parent=parent, message=message)
+
+def get_oid(name):
+    return commands.get_ref(name) or name
 
 
 def is_ignored(path):

@@ -64,6 +64,9 @@ ugit commit -m 'message'
 
 # list all commit
 ugit log {object_id}(optional)
+
+# check out
+ugit checkout {object_id}
 ```
 
 ## Underlying Implementation
