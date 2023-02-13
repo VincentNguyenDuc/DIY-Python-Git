@@ -1,6 +1,6 @@
 import argparse
 import os
-import subprocess
+from graphviz import Source
 import sys
 import textwrap
 
@@ -174,12 +174,9 @@ def k(args):
             dot += f'"{oid}" -> "{commit.parent}"\n'
 
     dot += '}'
-    print(dot)
 
-    with subprocess.Popen(
-            ['dot', '-Tgtk', '/dev/stdin'],
-            stdin=subprocess.PIPE) as proc:
-        proc.communicate(dot.encode())
+    src = Source(dot)
+    src.render()
 
 
 def status(args):
