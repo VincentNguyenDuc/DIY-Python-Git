@@ -2,6 +2,7 @@ import argparse
 import os
 import sys
 import textwrap
+from graphviz import Source
 
 from . import base
 from . import data
@@ -150,7 +151,11 @@ def k(args):
             dot += f'"{oid}" -> "{commit.parent}"\n'
 
     dot += '}'
-    print(dot)
+
+    # visualize using graphviz
+    src = Source(dot)
+    src.render()
+
 
 def status(args):
     HEAD = base.get_oid('@')

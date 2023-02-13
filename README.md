@@ -75,7 +75,7 @@ ugit branch {name} {start_point}(optional)
 # show all branches
 ugit branch
 
-# visualize the commits history 
+# visualize the commits history using graphviz
 ugit k
 
 # show the information of the current branch
