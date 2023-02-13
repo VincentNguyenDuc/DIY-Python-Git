@@ -21,8 +21,9 @@ Source: [Nikita](https://www.leshenko.net/p/ugit/)
 ## Technologies
 
 - Python
-- pip
-- git
+- Pip
+- Git
+- Graphviz
 
 ## Project Objectives
 
@@ -31,14 +32,21 @@ Source: [Nikita](https://www.leshenko.net/p/ugit/)
 - Set up a virtual environment for development
 - Used SHA-1 for implement "the object database"
 - Deepened my understanding into Git
-- Tried implemented this in a different language
+- Tried implemented this in a different language, and object-oriented programming
 
 ## Set Up
 
-- Install pip following [instruction](https://pip.pypa.io/en/stable/installation/)
-- Clone [this repository](https://github.com/VincentNguyenDuc/DIY-Python-Git.git)
-- Within the DIY-Python-Git directory, select the Python interpreter (where pip installed)
-- Run:
+- Install Pip following this [instruction](https://pip.pypa.io/en/stable/installation/)
+- Set up virtual environment following this [instruction](https://docs.python.org/3/library/venv.html)
+- Install Graphviz following this [instruction](https://graphviz.org/download/)
+- Clone [this repository](https://github.com/VincentNguyenDuc/py-git.git) to your working directory
+- Install dependencies from requirements.txt:
+
+```bash
+pip install -r requirements.txt
+```
+
+- To install 'ugit' into your virtual environment run:
 
 ```bash
 pip install .
@@ -80,6 +88,9 @@ ugit k
 
 # show the information of the current branch
 ugit status
+
+# show the differences between a commit and its parent
+ugit show
 
 # reset to a version of branch, and delete every commits after that version
 ugit reset {object_id}
