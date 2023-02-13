@@ -68,7 +68,7 @@ def parse_args():
 
 
 def init(args):
-    data.init()
+    base.init()
     print(f'Initialized empty ugit repository in {os.getcwd()}/{data.GIT_DIR}')
 
 
@@ -135,7 +135,3 @@ def k(args):
     dot += '}'
     print(dot)
 
-    with subprocess.Popen(
-            ['dot', '-Tgtk', '/dev/stdin'],
-            stdin=subprocess.PIPE) as proc:
-        proc.communicate(dot.encode())

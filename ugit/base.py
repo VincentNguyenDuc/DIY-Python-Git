@@ -7,6 +7,10 @@ from collections import deque, namedtuple
 
 from . import data
 
+def init():
+    data.init()
+    data.update_ref('HEAD', data.RefValue(symbolic=True, value='refs/heads/master'))
+
 
 def write_tree(directory='.'):
     entries = []
@@ -68,7 +72,7 @@ def _empty_current_directory():
                 continue
             try:
                 os.rmdir(path)
-            except (FileNotFoundError, OSError):
+            except (OSError):
                 # Deletion might fail if the directory contains ignored files,
                 # so it's OK
                 pass
