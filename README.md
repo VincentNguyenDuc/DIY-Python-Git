@@ -30,6 +30,8 @@ Source: [Nikita](https://www.leshenko.net/p/ugit/)
 - Worked with python packaging system
 - Set up a virtual environment for development
 - Used SHA-1 for implement "the object database"
+- Deepened my understanding into Git
+- Tried implemented this in a different language
 
 ## Set Up
 
@@ -45,6 +47,10 @@ pip install .
 ## Commands
 
 ```bash
+
+# object id: the hash code of the commit / branch
+# refs: reference to branch name / tags / object id
+
 # initialize a ugit repository
 ugit init
 
