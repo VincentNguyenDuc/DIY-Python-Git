@@ -72,6 +72,12 @@ ugit checkout {object_id / refs}
 # create a branch from a commit, default to the current HEAD
 ugit branch {name} {start_point}(optional) 
 
+# show all branches
+ugit branch
+
 # visualize the commits history 
 ugit k
+
+# show the information of the current branch
+ugit status
 ```
