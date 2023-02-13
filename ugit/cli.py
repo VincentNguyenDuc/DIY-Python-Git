@@ -91,8 +91,7 @@ def commit(args):
 
 
 def log(args):
-    oid = args.oid
-    while oid:
+    for oid in base.iter_commits_and_parents({args.oid}):
         commit = base.get_commit(oid)
 
         print(f'commit {oid}\n')
