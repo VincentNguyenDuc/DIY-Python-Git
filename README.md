@@ -1,5 +1,7 @@
 # An Implementation of Git using Python
 
+Source: [Nikita](https://www.leshenko.net/p/ugit/)
+
 ## Table of Contents
 
 - [An Implementation of Git using Python](#an-implementation-of-git-using-python)
@@ -9,13 +11,12 @@
   - [Project Objectives](#project-objectives)
   - [Set Up](#set-up)
   - [Commands](#commands)
-  - [Underlying Implementation](#underlying-implementation)
 
 ## General Information
 
 - In this project, I will try to implement a Git-like version control system called "μgit" from scratch but using Python
 
-- ugit is not exactly Git, but it shares the important ideas of Git. ugit is way shorter and doesn't implement irrelevant features.
+- Ugit is not exactly Git, but it shares the important ideas of Git. ugit is way shorter and doesn't implement irrelevant features.
 
 ## Technologies
 
@@ -59,11 +60,12 @@ ugit tag {name} {object_id}(optional - use for specific commit / if not availabl
 # List all commits from the chosen commit to the beginning of version history. If not specific object id or refs, then list all commits to the current HEAD
 ugit log {object_id / refs}(optional)
 
-# check out
+# check out a branch or a specific commit
 ugit checkout {object_id / refs}
 
-# render graph 
+# create a branch from a commit, default to the current HEAD
+ugit branch {name} {start_point}(optional) 
+
+# visualize the commits history 
 ugit k
 ```
-
-## Underlying Implementation
