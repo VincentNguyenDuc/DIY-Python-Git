@@ -66,6 +66,10 @@ def parse_args():
     status_parser = commands.add_parser('status')
     status_parser.set_defaults(func=status)
 
+    reset_parser = commands.add_parser('reset')
+    reset_parser.set_defaults(func=reset)
+    reset_parser.add_argument('commit', type=oid)
+
     return parser.parse_args()
 
 
@@ -97,10 +101,15 @@ def commit(args):
 
 
 def log(args):
+    refs = {}
+    for refname, ref in data.iter_refs():
+        refs.setdefault(ref.value, []).append(refname)
+
     for oid in base.iter_commits_and_parents({args.oid}):
         commit = base.get_commit(oid)
 
-        print(f'commit {oid}\n')
+        refs_str = f' ({", ".join (refs[oid])})' if oid in refs else ''
+        print(f'commit {oid}{refs_str}\n')
         print(textwrap.indent(commit.message, '    '))
         print('')
 
@@ -151,3 +160,6 @@ def status(args):
     else:
         print(f'HEAD detached at {HEAD[:10]}')
 
+
+def reset(args):
+    base.reset(args.commit)

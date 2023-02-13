@@ -80,4 +80,7 @@ ugit k
 
 # show the information of the current branch
 ugit status
+
+# reset to a version of branch, and delete every commits after that version
+ugit reset {object_id}
 ```
