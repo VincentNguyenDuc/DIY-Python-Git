@@ -1,6 +1,5 @@
 # An Implementation of Git using Python
 
-Source: [Nikita](https://www.leshenko.net/p/ugit/)
 
 ## Table of Contents
 
