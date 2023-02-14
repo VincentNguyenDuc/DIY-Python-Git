@@ -89,6 +89,9 @@ ugit k
 # show the information of the current branch
 ugit status
 
+# show the differences within a commit
+ugit diff {object_id}(optional - default to HEAD)
+
 # show the differences between a commit and its parent
 ugit show
 
