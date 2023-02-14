@@ -6,6 +6,7 @@ import string
 from collections import deque, namedtuple
 
 from . import data
+from . import diff
 
 def init():
     data.init()
@@ -98,12 +99,27 @@ def read_tree(tree_oid):
             f.write(data.get_object(oid))
 
 
+def read_tree_merged(t_base, t_HEAD, t_other):
+    _empty_current_directory()
+    for path, blob in diff.merge_trees(
+            get_tree(t_base), get_tree(t_HEAD), get_tree(t_other)).items():
+        os.makedirs(f'./{os.path.dirname (path)}', exist_ok=True)
+        with open(path, 'wb') as f:
+            f.write(blob)
+
+
+
 def commit(message):
     commit = f'tree {write_tree ()}\n'
 
     HEAD = data.get_ref('HEAD').value
     if HEAD:
         commit += f'parent {HEAD}\n'
+    
+    MERGE_HEAD = data.get_ref('MERGE_HEAD').value
+    if MERGE_HEAD:
+        commit += f'parent {MERGE_HEAD}\n'
+        data.delete_ref('MERGE_HEAD', deref=False)
 
     commit += '\n'
     commit += f'{message}\n'
@@ -132,6 +148,36 @@ def reset(oid):
     data.update_ref('HEAD', data.RefValue(symbolic=False, value=oid))
 
 
+def merge(other):
+    HEAD = data.get_ref('HEAD').value
+    assert HEAD
+    merge_base = get_merge_base(other, HEAD)
+    c_other = get_commit(other)
+
+    # Handle fast-forward merge
+    if merge_base == HEAD:
+        read_tree(c_other.tree)
+        data.update_ref('HEAD',
+                        data.RefValue(symbolic=False, value=other))
+        print('Fast-forward merge, no need to commit')
+        return
+
+    data.update_ref('MERGE_HEAD', data.RefValue(symbolic=False, value=other))
+
+    c_base = get_commit(merge_base)
+    c_HEAD = get_commit(HEAD)
+    read_tree_merged(c_base.tree, c_HEAD.tree, c_other.tree)
+    print('Merged in working tree\nPlease commit')
+
+
+def get_merge_base(oid1, oid2):
+    parents1 = set(iter_commits_and_parents({oid1}))
+
+    for oid in iter_commits_and_parents({oid2}):
+        if oid in parents1:
+            return oid
+
+
 def create_tag(name, oid):
     data.update_ref(f'refs/tags/{name}',
                     data.RefValue(symbolic=False, value=oid))
@@ -158,11 +204,11 @@ def get_branch_name():
     return os.path.relpath(HEAD, 'refs/heads')
 
 
-Commit = namedtuple('Commit', ['tree', 'parent', 'message'])
+Commit = namedtuple('Commit', ['tree', 'parents', 'message'])
 
 
 def get_commit(oid):
-    parent = None
+    parents = []
 
     commit = data.get_object(oid, 'commit').decode()
     lines = iter(commit.splitlines())
@@ -171,12 +217,12 @@ def get_commit(oid):
         if key == 'tree':
             tree = value
         elif key == 'parent':
-            parent = value
+            parents.append(value)
         else:
             assert False, f'Unknown field {key}'
 
     message = '\n'.join(lines)
-    return Commit(tree=tree, parent=parent, message=message)
+    return Commit(tree=tree, parents=parents, message=message)
 
 
 def iter_commits_and_parents(oids):
@@ -191,8 +237,10 @@ def iter_commits_and_parents(oids):
         yield oid
 
         commit = get_commit(oid)
-        # Return parent next
-        oids.appendleft(commit.parent)
+        # Return first parent next
+        oids.extendleft(commit.parents[:1])
+        # Return other parents later
+        oids.extend(commit.parents[1:])
 
 
 def get_oid(name):

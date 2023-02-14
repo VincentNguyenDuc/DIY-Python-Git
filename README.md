@@ -97,4 +97,10 @@ ugit show
 
 # reset to a version of branch, and delete every commits after that version
 ugit reset {object_id}
+
+# merge to branch using 3-way merge
+ugit merge {other branch}
+
+# find the base commit of 2 branch
+ugit merge-base {branch 1} {branch 2}
 ```
